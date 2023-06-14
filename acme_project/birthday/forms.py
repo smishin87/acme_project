@@ -10,7 +10,7 @@ BEATLES = {'Джон Леннон', 'Пол Маккартни', 'Джордж �
 class BirthdayForm(forms.ModelForm):
 
     class Meta:
-        fields = '__all__'
+        exclude = ('author',)
         model = BirthdayModel
         widgets = {
             'birthday': forms.DateInput({'type': 'date'}),
