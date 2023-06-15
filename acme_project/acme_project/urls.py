@@ -5,7 +5,16 @@ from django.urls import include, path, reverse_lazy
 from django.conf.urls.static import static
 from django.views.generic import CreateView
 
-urlpatterns = [
+
+handler404 = 'core.views.page_not_found'
+
+urlpatterns = []
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += (path('__debug__/', include(debug_toolbar.urls)),)
+
+urlpatterns += [
     path('', include('pages.urls')),
     path('admin/', admin.site.urls),
     path('birthday/', include('birthday.urls')),

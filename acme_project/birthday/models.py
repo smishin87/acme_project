@@ -8,7 +8,24 @@ from .validators import real_age
 User = get_user_model()
 
 
+class Tag(models.Model):
+    tag = models.CharField('Тег', max_length=20)
+
+    class Meta:
+        verbose_name = 'Тэг'
+        verbose_name_plural = 'Тэги'
+
+    def __str__(self):
+        return self.tag
+
+
 class BirthdayModel(models.Model):
+    tag = models.ManyToManyField(
+        Tag,
+        verbose_name='Теги',
+        blank=True,
+        help_text='Удерживайте Ctrl для выбора нескольких вариантов'
+    )
     first_name = models.CharField('Имя', max_length=20)
     last_name = models.CharField(
         'Фамилия',
@@ -36,3 +53,18 @@ class BirthdayModel(models.Model):
                 name='Unique person constraint',
             ),
         )
+
+
+class Congratulation(models.Model):
+    text = models.TextField('Текст поздравления')
+    birthday = models.ForeignKey(
+        BirthdayModel,
+        on_delete=models.CASCADE,
+        related_name='congratulations',
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ('created_at',)
+
